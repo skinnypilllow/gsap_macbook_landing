@@ -17,10 +17,38 @@ const Showcase = () => {
             }
         });
 
+import { useRef } from "react";
+
+const Showcase = () => {
+    const showcaseRef = useRef(null);
+    const isTablet = useMediaQuery({ query: '(max-width: 1024px)'});
+
+  useGSAP(() => {
+    if(!isTablet) {
+        const timeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: showcaseRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true,
+                pin: true,
+            }
+        });
+
         timeline
         .to('.mask img', {
            transform: 'scale(1.1)' 
         }).to('.content', { opacity: 1, y: 0, ease: 'power1.in' });
+    }
+
+  }, { dependencies: [isTablet], scope: showcaseRef })
+
+  return (
+    <section id="showcase" ref={showcaseRef}>
+      {/* component content */}
+    </section>
+  );
+};
     }
 
   }, [isTablet])
